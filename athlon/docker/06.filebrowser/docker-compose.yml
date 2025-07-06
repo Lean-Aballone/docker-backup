@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:s6
+    container_name: filebrowser
+    ports:
+      - 88:80
+    volumes:
+      - /mnt/usb_drive/filebrowser_data:/srv
+      - /home/$USER/docker/06.filebrowser/filebrowser_config:/config
+    restart: unless-stopped
+
+volumes:
+  filebrowser_config:
