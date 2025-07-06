@@ -1,0 +1,37 @@
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "7300:80/tcp"
+      - "444:443/tcp"
+    environment:
+      TZ: 'America/Argentina/Buenos_Aires'
+      WEBPASSWORD: '' # SET PASSWORD
+      FTLCONF_dns_listeningMode: 'all'
+      FTLCONF_webserver_api_password: ''
+      FTLCONF_misc_etc_dnsmasq_d: 'true'
+    volumes:
+      - '/home/$USER/docker/04.pihole/etc-pihole:/etc/pihole'
+      - '/home/$USER/docker/04.pihole/etc-dnsmasq.d:/etc/dnsmasq.d'
+    cap_add:
+      - NET_ADMIN
+      - SYS_TIME
+      - SYS_NICE
+    restart: unless-stopped
+
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+      - 8.8.8.8
+    networks:
+        nginx_reverse_proxy_net:
+          ipv4_address: 172.20.0.3
+          
+networks:
+  nginx_reverse_proxy_net:
+    external: true
+  bridge:
+    external: true
