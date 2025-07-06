@@ -1,0 +1,22 @@
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    container_name: nginx
+    networks:
+      reverse_proxy_net:
+        ipv4_address: 172.20.0.10
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - /home/$USER/docker/03.nginxProxyManager/data:/data
+      - /home/$USER/docker/03.nginxProxyManager/letsencrypt:/etc/letsencrypt
+
+networks:
+  reverse_proxy_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
